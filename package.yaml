@@ -23,6 +23,10 @@ dependencies:
 - base >= 4.7 && < 5
 - sqlite-simple
 - text
+- servant-server
+- aeson
+- wai
+- warp
 
 library:
   source-dirs: src
@@ -31,17 +35,6 @@ executables:
   sqlitye-exe:
     main:                Main.hs
     source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - sqlitye
-
-tests:
-  sqlitye-test:
-    main:                Spec.hs
-    source-dirs:         test
     ghc-options:
     - -threaded
     - -rtsopts
