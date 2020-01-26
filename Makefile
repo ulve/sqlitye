@@ -2,8 +2,8 @@
 
 DEFAULT_GOAL: help
 
-PROJECT_NAME ?= $(shell grep "^name" sqlitye.cabal | cut -d " " -f17)
-VERSION ?= $(shell grep "^version:" sqlitye.cabal | cut -d " " -f14)
+PROJECT_NAME ?= $(shell grep "^name" *.cabal | cut -d " " -f17)
+VERSION ?= $(shell grep "^version:" *.cabal | cut -d " " -f14)
 RESOLVER ?= $(shell grep "^resolver:" stack.yaml | cut -d " " -f2)
 GHC_VERSION ?= $(shell stack ghc -- --version | cut -d " " -f8)
 ARCH=$(shell uname -m)
