@@ -1,0 +1,11 @@
+version: '2'
+services:
+  myapp:
+    build:
+      context: .
+      args:
+        - BINARY_PATH
+    image: ulve/sqlitye
+    command: /opt/sqlitye/sqlitye-exe
+    ports:
+    - "8080:8080"
