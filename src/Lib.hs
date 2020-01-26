@@ -23,18 +23,18 @@ api = Proxy
 initDB :: FilePath -> IO ()
 initDB dbFile = withConnection dbFile $ \conn -> execute_ conn "CREATE TABLE IF NOT EXISTS messages (msg text not null)"
 
+postMessage :: FilePath -> Message -> Handler NoContent
+postMessage dbFile msg = do 
+  liftIO . withConnection dbFile $ \conn ->
+    execute conn "INSERT INTO messages VALUES (?)" (Only msg)
+  return NoContent
+
+getMessages :: FilePath -> Handler [Message]
+getMessages dbFile = fmap (map fromOnly) . liftIO $
+  withConnection dbFile $ \conn -> query_ conn "SELECT msg FROM messages"
+
 server :: FilePath -> Server API
-server dbFile = postMessage :<|> getMessages
-  where postMessage :: Message -> Handler NoContent
-        postMessage msg = do 
-          liftIO . withConnection dbFile $ \conn ->
-            execute conn "INSERT INTO messages VALUES (?)" (Only msg)
-          return NoContent
-
-        getMessages :: Handler [Message]
-        getMessages = fmap (map fromOnly) . liftIO $
-          withConnection dbFile $ \conn -> query_ conn "SELECT msg FROM messages"
-
+server dbFile = postMessage dbFile :<|> getMessages dbFile
 
 runApp :: FilePath -> IO ()
 runApp dbFile = run 8080 (serve api $ server dbFile)
